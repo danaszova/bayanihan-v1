@@ -49,7 +49,7 @@ export const Info = ({
           <Link href="/">
             <Image
               src="/logo.svg"
-              alt="Board logo"
+              alt="Bayanihan logo"
               height={40}
               width={40}
             />
@@ -57,7 +57,7 @@ export const Info = ({
               "font-semibold text-xl ml-2 text-black",
               font.className,
             )}>
-              Board
+              Bayanihan
             </span>
           </Link>
         </Button>
