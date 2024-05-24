@@ -10,12 +10,12 @@ const DashboardLayout = ({
   children,
 }: DashboardLayoutProps) => {
   return (
-    <main className="h-full">
+    <main className="h-full flex flex-col md:flex-row">
       <Sidebar />
-      <div className="pl-[60px] h-full">
+      <div className="flex-1 h-full md:pl-[60px]">
         <div className="flex gap-x-3 h-full">
           <OrgSidebar />
-          <div className="h-full flex-1">
+          <div className="flex-1 h-full">
             <Navbar />
             {children}
           </div>
