@@ -57,7 +57,7 @@ export const BoardList = ({
   }
 
   return (
-    <div>
+    <div className="mx-auto max-w-7xl p-4">
       <h2 className="text-3xl">
         {query.favorites ? "Favorite boards" : "Team boards"}
       </h2>
