@@ -65,7 +65,8 @@ export const Canvas = ({
     b: 0,
   });
 
- 
+  const [isPanning, setIsPanning] = useState(false);
+  const [panStart, setPanStart] = useState<Point>({ x: 0, y: 0 });
 
   useDisableScrollBounce();
   const history = useHistory();
@@ -448,6 +449,30 @@ export const Canvas = ({
     }
   }, [deleteLayers, history]);
 
+  const onTouchStart = (e: React.TouchEvent) => {
+    if (e.touches.length === 1) {
+      setIsPanning(true);
+      setPanStart({ x: e.touches[0].pageX, y: e.touches[0].pageY });
+    }
+  };
+
+  const onTouchMove = (e: React.TouchEvent) => {
+    if (isPanning && e.touches.length === 1) {
+      const currentTouch = { x: e.touches[0].pageX, y: e.touches[0].pageY };
+      const deltaX = currentTouch.x - panStart.x;
+      const deltaY = currentTouch.y - panStart.y;
+      setCamera((camera) => ({
+        x: camera.x + deltaX,
+        y: camera.y + deltaY,
+      }));
+      setPanStart(currentTouch);
+    }
+  };
+
+  const onTouchEnd = () => {
+    setIsPanning(false);
+  };
+
   return (
     <main
       className="h-full w-full relative bg-neutral-100 touch-none"
@@ -473,6 +498,9 @@ export const Canvas = ({
         onPointerLeave={onPointerLeave}
         onPointerDown={onPointerDown}
         onPointerUp={onPointerUp}
+        onTouchStart={onTouchStart}
+        onTouchMove={onTouchMove}
+        onTouchEnd={onTouchEnd}
       >
         <g
           style={{
