@@ -66,7 +66,7 @@ export const Info = ({
       <Hint label="Edit title" side="bottom" sideOffset={10}>
         <Button
           variant="board"
-          className="text-base font-normal px-2"
+          className="text-base font-normal px-2 text-black"
           onClick={() => onOpen(data._id, data.title)}
         >
           {data.title}
@@ -81,7 +81,7 @@ export const Info = ({
       >
         <div>
           <Hint label="Main menu" side="bottom" sideOffset={10}>
-            <Button size="icon" variant="board">
+            <Button size="icon" variant="board" className="bg-white text-black !important ">
               <Menu />
             </Button>
           </Hint>
