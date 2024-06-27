@@ -1,67 +1,47 @@
 "use client";
+import { useEffect } from "react";
 import { Excalidraw } from "@excalidraw/excalidraw";
-import { Info } from "./info";
-import { Participants } from "./participants";
-import ExcalidrawComponent from "./excaliDraw";
+import { Info } from "./info";  
+import { Participants } from "./participants";  
+
 
 interface CanvasProps {
   boardId: string;
 }
 
-
-import dynamic from "next/dynamic";
-const Excalidraw2 = dynamic(
-  async () => (await import("@excalidraw/excalidraw")).Excalidraw,
-  {
-    ssr: false,
-  },
-);
-
-//Closest to the original
-/*
-
-  return (
-    <>
-   <div className="bg-red-500" style={{ height: "60px" } }>
-   
-   <Info boardId={boardId} />
-      <Participants />
-   </div>
-   
-   
-    <div style={{ height: "900px" }}>
-      <Excalidraw />
-    </div>
-  </>
-  );
-
-
-
-
-*/
-
-
-
 export const Canvas = ({ boardId }: CanvasProps) => {
- 
+  useEffect(() => {
+    const handleResize = () => {
+      const container = document.getElementById("excalidraw-container");
+      if (container) {
+        container.style.height = `${window.innerHeight - 64}px`; // 64px = 4rem (top bar height)
+      }
+    };
+
+    window.addEventListener("resize", handleResize);
+    handleResize();
+
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
 
   return (
-    <div className="flex flex-col h-screen">
+    <div className="h-screen overflow-hidden">
       {/* Top Bar */}
-      <div className="h-16 bg-gray-800 text-white flex items-center justify-between px-4">
+      <div className="h-16 bg-gray-800 text-white flex items-center justify-between px-4 fixed top-0 w-full z-10">
       <Info boardId={boardId} />
-      <Participants />
+        <Participants />
       </div>
-      
+
       {/* Excalidraw Container */}
-      <div className="flex-1 relative">
-      <Excalidraw />
+      <div id="excalidraw-container" className="mt-16 relative">
+        <Excalidraw
+          onChange={(elements, state) => console.log("Elements: ", elements, "State: ", state)}
+          initialData={{
+            appState: { zenModeEnabled: true, viewBackgroundColor: "#a5d8ff" },
+            scrollToContent: true,
+          }}
+        />
       </div>
     </div>
   );
-
-
-
-
-
 };
