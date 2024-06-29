@@ -12,7 +12,7 @@ export const Loading = () => {
       <Loader className="h-6 w-6 text-muted-foreground animate-spin" />
       <InfoSkeleton />
       <ParticipantsSkeleton />
-      <ToolbarSkeleton />
+      {/*<ToolbarSkeleton />*/}
     </main>
   );
 };

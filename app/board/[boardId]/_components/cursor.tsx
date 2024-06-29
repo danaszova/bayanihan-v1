@@ -18,6 +18,8 @@ export const Cursor = memo(({
 
   const name = info?.name || "Teammate";
 
+  console.log(info, cursor);
+
   if (!cursor) {
     return null;
   }
