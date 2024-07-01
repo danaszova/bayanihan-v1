@@ -9,6 +9,8 @@ import { Camera, CanvasMode, CanvasState } from "@/types/canvas";
 import { Info } from "./info";
 import { Participants } from "./participants";
 import { CursorsPresence } from "./cursors-presence";
+import { ExcalidrawElement } from "@excalidraw/excalidraw/types/element/types";
+import { AppState } from "@excalidraw/excalidraw/types/types";
 
 interface CanvasProps {
   boardId: string;
@@ -18,6 +20,13 @@ export const Canvas = ({ boardId }: CanvasProps) => {
   const [canvasState, setCanvasState] = useState<CanvasState>({
     mode: CanvasMode.None,
   });
+
+  const [excalidrawState, setExcalidrawState] = useState<{
+    elements: readonly ExcalidrawElement[];
+    appState: AppState;
+  } | null>(null);
+
+
   const [camera, setCamera] = useState<Camera>({ x: 0, y: 0 });
 
   useEffect(() => {
@@ -41,11 +50,24 @@ export const Canvas = ({ boardId }: CanvasProps) => {
     }));
   }, []);
 
+//---------------------------------------------------
+const handleExcalidrawChange = useCallback(
+  (elements: readonly ExcalidrawElement[], appState: AppState) => {
+    console.log("Excalidraw change:", elements, appState);
+    setExcalidrawState({ elements, appState });
+    // Optionally, broadcast changes to other users via Liveblocks
+  },
+  []
+);
+//---------------------------------------------------
+
+
+
   const onPointerMove = useMutation(
     ({ setMyPresence }, e: React.PointerEvent) => {
       e.preventDefault();
       const current = pointerEventToCanvasPoint(e, camera);
-      console.log("Pointer Move: ", current);
+      //console.log("Pointer Move: ", current);
       setMyPresence({ cursor: current });
     },
     [camera, canvasState]
@@ -80,7 +102,10 @@ export const Canvas = ({ boardId }: CanvasProps) => {
       </div>
 
       <div id="excalidraw-container" className="mt-16 relative">
-        <Excalidraw />
+      <Excalidraw
+          onChange={handleExcalidrawChange}
+          initialData={excalidrawState} // Optionally pass initial state
+        />
       </div>
 
       <svg
